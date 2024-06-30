@@ -1,11 +1,12 @@
 import '@/app/styles/index.scss';
-import { classNames } from '@/shared/lib/classNames/classNames';
+import AppRouter from '@/app/providers/AppRouter/ui/AppRouter.tsx';
 
 function App() {
-    console.log(classNames('huy', {}, []));
     return (
         <div className="app">
-            <div className="content-page">fdsff</div>
+            <div className="content-page">
+                <AppRouter />
+            </div>
         </div>
     );
 }
