@@ -1,5 +1,5 @@
-import '@/app/styles/index.scss';
-import AppRouter from '@/app/providers/AppRouter/ui/AppRouter.tsx';
+import './styles/index.scss';
+import { AppRouter } from './providers/AppRouter';
 
 function App() {
     return (
