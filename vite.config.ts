@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
         plugins: [react()],
         define: {
             __GITHUB_KEY__: JSON.stringify(env.GITHUB_KEY),
+            __API_URL__: JSON.stringify(env.API_URL),
         },
         envDir: resolve(__dirname),
     };
