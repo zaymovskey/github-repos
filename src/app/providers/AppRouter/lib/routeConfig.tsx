@@ -1,6 +1,6 @@
 import { type RouteProps } from 'react-router-dom';
 import { ReposListPage } from '@/pages/ReposListPage';
-import { RepoCardPage } from '@/pages/RepoCardPage';
+import { RepoDetailsPage } from '@/pages/RepoDetailsPage';
 
 export enum EnumAppRoutes {
     REPOS_LIST = 'repos_list',
@@ -19,6 +19,6 @@ export const RouteConfig: Record<EnumAppRoutes, RouteProps> = {
     },
     [EnumAppRoutes.REPO_CARD]: {
         path: RoutePath.repo_card,
-        element: <RepoCardPage />,
+        element: <RepoDetailsPage />,
     },
 };

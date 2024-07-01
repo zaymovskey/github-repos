@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 
-const RepoCardPage: FC = () => {
+const RepoDetailsPage: FC = () => {
     return <div>Карточка</div>;
 };
 
-export default RepoCardPage;
+export default RepoDetailsPage;
