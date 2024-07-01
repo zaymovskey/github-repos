@@ -15,5 +15,6 @@ export default defineConfig(({ mode }) => {
         define: {
             __GITHUB_KEY__: JSON.stringify(env.GITHUB_KEY),
         },
+        envDir: resolve(__dirname),
     };
 });
