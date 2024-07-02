@@ -3,3 +3,10 @@
     flex-direction: column;
     gap: 10px;
 }
+
+.loaderContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
