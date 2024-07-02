@@ -2,27 +2,51 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import getReposListQuery from './getReposList.graphql';
 import { IThunkConfig } from '@/app/providers/StoreProvider';
-import {
-    GetReposListQuery,
-    GetReposListQueryVariables,
-} from './getReposList.gen.ts';
+import { GetReposListQueryVariables } from './getReposList.gen.ts';
+import { IReposListItem } from '../../types/ReposListSheme.ts';
+import { IGetReposListReturnType } from '@/entity/repo/model/services/getReposList/getReposListReturnType.ts';
+import { reposListActions } from '../../slices/reposListSlice.ts';
 
 export const getReposListThunk = createAsyncThunk<
-    GetReposListQuery,
+    void,
     GetReposListQueryVariables,
     IThunkConfig<string>
->('reposList/getReposListThunk', async (variables, thunkAPI) => {
+>('reposList/getReposListThunk', async (variables, thunkAPI): Promise<void> => {
     try {
         const query = getReposListQuery.loc!.source.body;
-        const response = await thunkAPI.extra.api.post<GetReposListQuery>('', {
-            query,
-            variables,
-        });
+        const response = await thunkAPI.extra.api.post<IGetReposListReturnType>(
+            '',
+            {
+                query,
+                variables,
+            },
+        );
+        const data = response.data.data;
+
+        const reposList: IReposListItem[] | undefined = data.search.nodes?.map(
+            (node) => {
+                const lastCommitedDate =
+                    node.defaultBranchRef?.target?.history.nodes?.[0]
+                        .committedDate;
+
+                return {
+                    name: node.name,
+                    starsCount: node.stargazerCount,
+                    url: node.url,
+                    lasCommitedDate: lastCommitedDate
+                        ? new Date(lastCommitedDate)
+                        : undefined,
+                };
+            },
+        );
+
+        thunkAPI.dispatch(reposListActions.setData(reposList ?? []));
+
         console.log(response.data);
-        return response.data;
     } catch (error) {
         if (error instanceof AxiosError) {
-            return thunkAPI.rejectWithValue(error.message);
+            thunkAPI.rejectWithValue(error.message);
+            return;
         }
         throw error;
     }

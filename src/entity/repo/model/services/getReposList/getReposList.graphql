@@ -1,7 +1,7 @@
 query getReposList($first: Int, $after: String) {
     search(
         type: REPOSITORY
-        query: "is:public sort:updated"
+        query: "is:public sort:interactions"
         first: $first
         after: $after
     ) {
