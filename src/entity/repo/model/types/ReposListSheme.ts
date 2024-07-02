@@ -1,7 +1,7 @@
 export interface IReposListItem {
     name: string;
     starsCount: number;
-    lasCommitedDate?: Date;
+    lasCommitedDate?: string;
     url: string;
 }
 

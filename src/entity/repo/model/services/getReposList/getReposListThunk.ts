@@ -33,16 +33,12 @@ export const getReposListThunk = createAsyncThunk<
                     name: node.name,
                     starsCount: node.stargazerCount,
                     url: node.url,
-                    lasCommitedDate: lastCommitedDate
-                        ? new Date(lastCommitedDate)
-                        : undefined,
+                    lasCommitedDate: lastCommitedDate,
                 };
             },
         );
 
         thunkAPI.dispatch(reposListActions.setData(reposList ?? []));
-
-        console.log(response.data);
     } catch (error) {
         if (error instanceof AxiosError) {
             thunkAPI.rejectWithValue(error.message);
