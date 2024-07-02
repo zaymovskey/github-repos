@@ -14,12 +14,14 @@ export const RepoCard: FC<IRepoCardProps> = ({ repo, className }) => {
             <a href="#" className={cls.repoName}>
                 {repo.name}
             </a>
-            <div className={cls.repoStars}>{repo.starsCount} ☆</div>
-            <div>
+            <span className={cls.repoStars}>{repo.starsCount} ☆</span>
+            <span>
                 Дата последнего коммита:{' '}
                 {repo.lasCommitedDate ?? 'Нет коммитов'}
-            </div>
-            <a href={repo.url}>Перейти к репозиторию на GitHub</a>
+            </span>
+            <a href={repo.url} className={cls.repoLink}>
+                Перейти к репозиторию на GitHub
+            </a>
         </div>
     );
 };

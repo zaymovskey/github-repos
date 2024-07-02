@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: flex-start;
 }
 
 .repoName {
@@ -13,4 +14,8 @@
 
 .repoStars {
     font-weight: bold;
+}
+
+.repoLink {
+    display: inline-block;
 }

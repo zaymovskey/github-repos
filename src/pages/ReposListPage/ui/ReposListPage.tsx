@@ -25,13 +25,16 @@ const ReposListPage: FC = () => {
     return (
         <div>
             <ReposList repos={repos.list} loading={isLoading} />
-            <div className={cls.paginationBlock}></div>
-            <Pagination
-                currentPage={repos.currentPage}
-                totalPages={Math.ceil(repos.totalReposCount / ITEMS_PER_PAGE)}
-                buttonsCount={5}
-                onClickItem={onPaginationItemClick}
-            />
+            <div className={cls.paginationBlock}>
+                <Pagination
+                    currentPage={repos.currentPage}
+                    totalPages={Math.ceil(
+                        repos.totalReposCount / ITEMS_PER_PAGE,
+                    )}
+                    buttonsCount={5}
+                    onClickItem={onPaginationItemClick}
+                />
+            </div>
         </div>
     );
 };
