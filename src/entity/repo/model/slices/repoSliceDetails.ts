@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IReposListSlice } from '../types/ReposListSlice.ts';
+import { IReposListSlice } from '../types/ReposListSheme.ts';
 
 const initialState: IReposListSlice = {
     isLoading: false,

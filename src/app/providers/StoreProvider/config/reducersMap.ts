@@ -4,5 +4,5 @@ import { repoDetailsReducer, reposListReducer } from '@/entity/repo';
 
 export const rootReducers: ReducersMapObject<IStateScheme> = {
     reposList: reposListReducer,
-    repo: repoDetailsReducer,
+    repoDetails: repoDetailsReducer,
 };
