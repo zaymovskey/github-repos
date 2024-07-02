@@ -5,7 +5,7 @@ import { getReposListThunk } from '../services/getReposList/getReposListThunk.ts
 const initialState: IReposListScheme = {
     isLoading: false,
     error: undefined,
-    data: undefined,
+    data: [],
 };
 
 export const reposListSlice = createSlice({

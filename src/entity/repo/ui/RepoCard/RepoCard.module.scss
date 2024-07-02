@@ -1,0 +1,16 @@
+.repoCard {
+    border: 1px solid #cacaca;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.repoName {
+    font-weight: bold;
+}
+
+.repoStars {
+    font-weight: bold;
+}

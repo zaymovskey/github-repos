@@ -8,5 +8,5 @@ export interface IReposListItem {
 export interface IReposListScheme {
     isLoading: boolean;
     error?: string;
-    data?: IReposListItem[];
+    data: IReposListItem[];
 }
