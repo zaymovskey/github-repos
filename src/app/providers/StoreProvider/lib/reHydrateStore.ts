@@ -14,8 +14,7 @@ export const reHydrateStore = (): RecursivePartial<IStateScheme> | void => {
         return {
             reposList: {
                 data: {
-                    currentPage:
-                        Number(localStorage.getItem(CURRENT_PAGE)) ?? 1,
+                    currentPage: Number(localStorage.getItem(CURRENT_PAGE)),
                     list: [],
                     totalReposCount: 0,
                 },
