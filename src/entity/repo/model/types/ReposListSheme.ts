@@ -1,4 +1,5 @@
 export interface IReposListItem {
+    id: string;
     name: string;
     starsCount: number;
     lasCommitedDate?: string;
@@ -8,5 +9,9 @@ export interface IReposListItem {
 export interface IReposListScheme {
     isLoading: boolean;
     error?: string;
-    data: IReposListItem[];
+    data: {
+        totalReposCount: number;
+        list: IReposListItem[];
+        currentPage: number;
+    };
 }

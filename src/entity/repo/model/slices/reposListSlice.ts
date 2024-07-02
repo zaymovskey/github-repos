@@ -5,15 +5,25 @@ import { getReposListThunk } from '../services/getReposList/getReposListThunk.ts
 const initialState: IReposListScheme = {
     isLoading: false,
     error: undefined,
-    data: [],
+    data: {
+        totalReposCount: 0,
+        list: [],
+        currentPage: 1,
+    },
 };
 
 export const reposListSlice = createSlice({
     name: 'reposListSlice',
     initialState,
     reducers: {
-        setData(state, action: PayloadAction<IReposListItem[]>) {
-            state.data = action.payload;
+        setList(state, action: PayloadAction<IReposListItem[]>) {
+            state.data.list = action.payload;
+        },
+        setTotalReposCount(state, action: PayloadAction<number>) {
+            state.data.totalReposCount = action.payload;
+        },
+        setCurrentPage(state, action: PayloadAction<number>) {
+            state.data.currentPage = action.payload;
         },
     },
     extraReducers: (builder) => {

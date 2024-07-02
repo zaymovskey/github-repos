@@ -5,8 +5,10 @@ query getReposList($first: Int, $after: String) {
         first: $first
         after: $after
     ) {
+        repositoryCount
         nodes {
             ... on Repository {
+                id
                 name
                 stargazerCount
                 url

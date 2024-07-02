@@ -27,7 +27,7 @@ export const ReposList: FC<IReposListProps> = ({
     return (
         <div className={classNames(cls.reposList, {}, [className])}>
             {repos.map((repo) => (
-                <RepoCard repo={repo} />
+                <RepoCard repo={repo} key={repo.id} />
             ))}
         </div>
     );

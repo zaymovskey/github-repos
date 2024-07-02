@@ -1,13 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducers } from './reducersMap';
-import { IStateScheme } from './StateScheme.ts';
 import { $api } from '@/shared/api';
+import { localStorageMiddleware } from '../lib/localStorageMiddleware.ts';
+import { reHydrateStore } from '@/app/providers/StoreProvider/lib/reHydrateStore.ts';
 
-export function createReduxStore(initialState?: IStateScheme) {
+export function createReduxStore() {
     return configureStore({
         reducer: rootReducers,
         devTools: true,
-        preloadedState: initialState,
+        preloadedState: reHydrateStore(),
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({
                 thunk: {
@@ -15,7 +16,7 @@ export function createReduxStore(initialState?: IStateScheme) {
                         api: $api,
                     },
                 },
-            }),
+            }).concat(localStorageMiddleware),
     });
 }
 

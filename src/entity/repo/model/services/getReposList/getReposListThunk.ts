@@ -34,11 +34,15 @@ export const getReposListThunk = createAsyncThunk<
                     starsCount: node.stargazerCount,
                     url: node.url,
                     lasCommitedDate: lastCommitedDate,
+                    id: node.id,
                 };
             },
         );
 
-        thunkAPI.dispatch(reposListActions.setData(reposList ?? []));
+        thunkAPI.dispatch(reposListActions.setList(reposList ?? []));
+        thunkAPI.dispatch(
+            reposListActions.setTotalReposCount(data.search.repositoryCount),
+        );
     } catch (error) {
         if (error instanceof AxiosError) {
             thunkAPI.rejectWithValue(error.message);

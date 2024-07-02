@@ -15,7 +15,10 @@ export const RepoCard: FC<IRepoCardProps> = ({ repo, className }) => {
                 {repo.name}
             </a>
             <div className={cls.repoStars}>{repo.starsCount} ☆</div>
-            <div>Дата последнего коммита: {repo.lasCommitedDate}</div>
+            <div>
+                Дата последнего коммита:{' '}
+                {repo.lasCommitedDate ?? 'Нет коммитов'}
+            </div>
             <a href={repo.url}>Перейти к репозиторию на GitHub</a>
         </div>
     );
