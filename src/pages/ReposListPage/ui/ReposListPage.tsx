@@ -20,8 +20,7 @@ const ReposListPage: FC = () => {
     useEffect(() => {
         dispatch(
             getReposListThunk({
-                variables: { first: ITEMS_PER_PAGE },
-                cursor: repos.startCursor,
+                variables: { first: ITEMS_PER_PAGE, before: repos.startCursor },
             }),
         );
     }, []);
