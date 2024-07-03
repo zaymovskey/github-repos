@@ -24,6 +24,7 @@ const ReposListPage: FC = () => {
 
     useEffect(() => {
         // Первая загрузка
+        dispatch(reposListActions.setIsLoading(true));
         if (repos.searchQuery !== '') {
             getReposList({
                 variables: {
@@ -115,7 +116,7 @@ const ReposListPage: FC = () => {
     const debouncedSetSearchQueryRef = useRef(
         debounce(
             (query: string) => dispatch(reposListActions.setSearchQuery(query)),
-            1000,
+            1500,
         ),
     );
 
