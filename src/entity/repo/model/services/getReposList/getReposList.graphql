@@ -1,9 +1,11 @@
-query getReposList($first: Int, $after: String) {
+query getReposList($first: Int, $after: String, $before: String, $last: Int) {
     search(
         type: REPOSITORY
         query: "is:public sort:interactions"
         first: $first
         after: $after
+        before: $before
+        last: $last
     ) {
         repositoryCount
         nodes {
@@ -29,6 +31,7 @@ query getReposList($first: Int, $after: String) {
         }
         pageInfo {
             endCursor
+            startCursor
             hasNextPage
         }
     }

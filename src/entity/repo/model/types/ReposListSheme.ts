@@ -13,5 +13,7 @@ export interface IReposListScheme {
         totalReposCount: number;
         list: IReposListItem[];
         currentPage: number;
+        endCursor?: string;
+        startCursor?: string;
     };
 }

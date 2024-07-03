@@ -1,4 +1,8 @@
-import { CURRENT_PAGE } from '@/shared/const/localStorage.ts';
+import {
+    CURRENT_PAGE,
+    END_CURSOR,
+    START_CURSOR,
+} from '@/shared/const/localStorage.ts';
 import { IStateScheme } from '@/app/providers/StoreProvider';
 
 type RecursivePartial<T> = {
@@ -17,6 +21,9 @@ export const reHydrateStore = (): RecursivePartial<IStateScheme> | void => {
                     currentPage: Number(localStorage.getItem(CURRENT_PAGE)),
                     list: [],
                     totalReposCount: 0,
+                    endCursor: localStorage.getItem(END_CURSOR) ?? undefined,
+                    startCursor:
+                        localStorage.getItem(START_CURSOR) ?? undefined,
                 },
             },
         };
