@@ -56,6 +56,15 @@ const ReposListPage: FC = () => {
 
     return (
         <div>
+            <input
+                type="text"
+                placeholder="Поиск"
+                className={cls.searchInput}
+                value={repos.searchQuery}
+                onChange={(e) => {
+                    dispatch(reposListActions.setSearchQuery(e.target.value));
+                }}
+            />
             <ReposList repos={repos.list} loading={isLoading} />
             <div className={cls.paginationBlock}>
                 <Pagination

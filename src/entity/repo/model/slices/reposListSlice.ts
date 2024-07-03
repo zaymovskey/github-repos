@@ -11,6 +11,7 @@ const initialState: IReposListScheme = {
         currentPage: 1,
         endCursor: undefined,
         startCursor: undefined,
+        searchQuery: '',
     },
 };
 
@@ -32,6 +33,9 @@ export const reposListSlice = createSlice({
         },
         setStartCursor(state, action: PayloadAction<string>) {
             state.data.startCursor = action.payload;
+        },
+        setSearchQuery(state, action: PayloadAction<string>) {
+            state.data.searchQuery = action.payload;
         },
     },
     extraReducers: (builder) => {

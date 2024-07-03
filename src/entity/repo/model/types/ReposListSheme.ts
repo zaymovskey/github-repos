@@ -15,5 +15,6 @@ export interface IReposListScheme {
         currentPage: number;
         endCursor?: string;
         startCursor?: string;
+        searchQuery?: string;
     };
 }

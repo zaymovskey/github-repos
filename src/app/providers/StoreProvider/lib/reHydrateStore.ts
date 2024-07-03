@@ -1,6 +1,7 @@
 import {
     CURRENT_PAGE,
     END_CURSOR,
+    SEARCH_QUERY,
     START_CURSOR,
 } from '@/shared/const/localStorage.ts';
 import { IStateScheme } from '@/app/providers/StoreProvider';
@@ -24,6 +25,7 @@ export const reHydrateStore = (): RecursivePartial<IStateScheme> | void => {
                     endCursor: localStorage.getItem(END_CURSOR) ?? undefined,
                     startCursor:
                         localStorage.getItem(START_CURSOR) ?? undefined,
+                    searchQuery: localStorage.getItem(SEARCH_QUERY) ?? '',
                 },
             },
         };
