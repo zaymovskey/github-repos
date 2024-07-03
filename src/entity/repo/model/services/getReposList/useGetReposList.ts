@@ -1,57 +1,53 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosError } from 'axios';
-import getReposListQuery from './getReposList.graphql';
-import { IThunkConfig } from '@/app/providers/StoreProvider';
-import { GetReposListQueryVariables } from './getReposList.gen.ts';
-import { IReposListItem } from '../../types/ReposListSheme.ts';
+import { GetReposListQueryVariables } from '@/entity/repo/model/services/getReposList/getReposList.gen.ts';
+import getReposListQuery from '@/entity/repo/model/services/getReposList/getReposList.graphql';
 import {
     IGetReposListReturnType,
     IRepoSearch,
 } from '@/entity/repo/model/services/getReposList/getReposListReturnType.ts';
-import { reposListActions } from '../../slices/reposListSlice.ts';
+import { reposListActions } from '@/entity/repo/model/slices/reposListSlice.ts';
+import { $api } from '@/shared/api';
+import { IReposListItem } from '@/entity/repo/model/types/ReposListSheme.ts';
+import { useAppDispatch } from '@/app/providers/StoreProvider';
 
-export interface IGetReposListThunkAttrs {
+export interface IUseGetReposListAttrs {
     variables: GetReposListQueryVariables;
     cursor?: string;
-    action?: IGetReposListThunkAttrsAction;
+    action?: IUseGetReposListAttrsAction;
 }
 
-export interface IGetReposListThunkAttrsAction {
+export interface IUseGetReposListAttrsAction {
     type: 'next' | 'prev';
     count: number;
 }
 
-export const getReposListThunk = createAsyncThunk<
-    void,
-    IGetReposListThunkAttrs,
-    IThunkConfig<string>
->('reposList/getReposListThunk', async (attrs, thunkAPI): Promise<void> => {
-    try {
+export const useGetReposList = () => {
+    const dispatch = useAppDispatch();
+
+    const getReposList = async (attrs: IUseGetReposListAttrs) => {
         const query = getReposListQuery.loc!.source.body;
 
         // Первое получение (не по пагинации)
         if (!attrs.action) {
-            const response =
-                await thunkAPI.extra.api.post<IGetReposListReturnType>('', {
-                    query,
-                    variables: attrs.variables,
-                });
+            const response = await $api.post<IGetReposListReturnType>('', {
+                query,
+                variables: attrs.variables,
+            });
             const data = response.data.data;
 
             const reposList = requestReposListToRedux(data.search);
 
-            thunkAPI.dispatch(reposListActions.setList(reposList ?? []));
-            thunkAPI.dispatch(
+            dispatch(reposListActions.setList(reposList ?? []));
+            dispatch(
                 reposListActions.setTotalReposCount(
                     data.search.repositoryCount,
                 ),
             );
-            thunkAPI.dispatch(
+            dispatch(
                 reposListActions.setStartCursor(
                     data.search.pageInfo.startCursor,
                 ),
             );
-            thunkAPI.dispatch(
+            dispatch(
                 reposListActions.setEndCursor(data.search.pageInfo.endCursor),
             );
             return;
@@ -75,11 +71,10 @@ export const getReposListThunk = createAsyncThunk<
         let resultListData: IGetReposListReturnType | undefined;
 
         for (let i = attrs.action.count; i > 0; i--) {
-            const response =
-                await thunkAPI.extra.api.post<IGetReposListReturnType>('', {
-                    query,
-                    variables: { ...variables },
-                });
+            const response = await $api.post<IGetReposListReturnType>('', {
+                query,
+                variables: { ...variables },
+            });
 
             const data = response.data.data;
             if (attrs.action.type === 'next') {
@@ -97,36 +92,34 @@ export const getReposListThunk = createAsyncThunk<
             const reposList = requestReposListToRedux(
                 resultListData.data.search,
             );
-            thunkAPI.dispatch(reposListActions.setList(reposList ?? []));
-            thunkAPI.dispatch(
+            dispatch(reposListActions.setList(reposList ?? []));
+            dispatch(
                 reposListActions.setTotalReposCount(
                     resultListData.data.search.repositoryCount,
                 ),
             );
-            thunkAPI.dispatch(
+            dispatch(
                 reposListActions.setStartCursor(
                     resultListData.data.search.pageInfo.startCursor,
                 ),
             );
-            thunkAPI.dispatch(
+            dispatch(
                 reposListActions.setEndCursor(
                     resultListData.data.search.pageInfo.endCursor,
                 ),
             );
-            thunkAPI.dispatch(
+            dispatch(
                 reposListActions.setTotalReposCount(
                     resultListData.data.search.repositoryCount,
                 ),
             );
         }
-    } catch (error) {
-        if (error instanceof AxiosError) {
-            thunkAPI.rejectWithValue(error.message);
-            return;
-        }
-        throw error;
-    }
-});
+
+        return;
+    };
+
+    return getReposList;
+};
 
 const requestReposListToRedux = (requestReposSearch: IRepoSearch) => {
     const reposList: IReposListItem[] | undefined =

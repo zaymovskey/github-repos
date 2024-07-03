@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IReposListItem, IReposListScheme } from '../types/ReposListSheme.ts';
-import { getReposListThunk } from '../services/getReposList/getReposListThunk.ts';
 
 const initialState: IReposListScheme = {
     isLoading: false,
@@ -37,19 +36,9 @@ export const reposListSlice = createSlice({
         setSearchQuery(state, action: PayloadAction<string>) {
             state.data.searchQuery = action.payload;
         },
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(getReposListThunk.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(getReposListThunk.fulfilled, (state) => {
-                state.isLoading = false;
-            })
-            .addCase(getReposListThunk.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload;
-            });
+        setIsLoading(state, action: PayloadAction<boolean>) {
+            state.isLoading = action.payload;
+        },
     },
 });
 
