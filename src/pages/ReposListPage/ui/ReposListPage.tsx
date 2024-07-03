@@ -25,6 +25,7 @@ const ReposListPage: FC = () => {
                     ...(repos.currentPage !== 1 && {
                         before: repos.startCursor,
                     }),
+                    query: 'aa',
                 },
             }),
         );
@@ -44,7 +45,7 @@ const ReposListPage: FC = () => {
                   };
         dispatch(
             getReposListThunk({
-                variables: { first: ITEMS_PER_PAGE },
+                variables: { first: ITEMS_PER_PAGE, query: 'aa' },
                 cursor:
                     fetchAction.type === 'next'
                         ? repos.endCursor

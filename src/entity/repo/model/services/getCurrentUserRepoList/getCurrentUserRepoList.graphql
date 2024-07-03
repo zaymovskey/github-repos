@@ -1,21 +1,8 @@
-query getReposList(
-    $first: Int
-    $after: String
-    $before: String
-    $last: Int
-    $query: String!
-) {
-    search(
-        type: REPOSITORY
-        query: $query
-        first: $first
-        after: $after
-        before: $before
-        last: $last
-    ) {
-        repositoryCount
-        nodes {
-            ... on Repository {
+{
+    viewer {
+        repositories(first: 10) {
+            totalCount
+            nodes {
                 id
                 name
                 stargazerCount
@@ -34,11 +21,11 @@ query getReposList(
                     }
                 }
             }
-        }
-        pageInfo {
-            endCursor
-            startCursor
-            hasNextPage
+            pageInfo {
+                endCursor
+                startCursor
+                hasNextPage
+            }
         }
     }
 }

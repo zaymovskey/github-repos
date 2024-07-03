@@ -26,27 +26,10 @@ export const getReposListThunk = createAsyncThunk<
     IGetReposListThunkAttrs,
     IThunkConfig<string>
 >('reposList/getReposListThunk', async (attrs, thunkAPI): Promise<void> => {
-    const requestReposListToRedux = (requestReposSearch: IRepoSearch) => {
-        const reposList: IReposListItem[] | undefined =
-            requestReposSearch.nodes?.map((node) => {
-                const lastCommitedDate =
-                    node.defaultBranchRef?.target?.history.nodes?.[0]
-                        .committedDate;
-
-                return {
-                    name: node.name,
-                    starsCount: node.stargazerCount,
-                    url: node.url,
-                    lasCommitedDate: lastCommitedDate,
-                    id: node.id,
-                };
-            });
-
-        return reposList;
-    };
-
     try {
         const query = getReposListQuery.loc!.source.body;
+
+        // Первое получение (не по пагинации)
         if (!attrs.action) {
             const response =
                 await thunkAPI.extra.api.post<IGetReposListReturnType>('', {
@@ -71,61 +54,70 @@ export const getReposListThunk = createAsyncThunk<
             thunkAPI.dispatch(
                 reposListActions.setEndCursor(data.search.pageInfo.endCursor),
             );
+            return;
+        }
+
+        // Получение по пагинации
+        let variables: GetReposListQueryVariables;
+        if (attrs.action.type === 'next') {
+            variables = {
+                first: attrs.variables.first,
+                after: attrs.cursor,
+                query: attrs.variables.query,
+            };
         } else {
-            let variables: GetReposListQueryVariables;
+            variables = {
+                last: attrs.variables.first,
+                before: attrs.cursor,
+                query: attrs.variables.query,
+            };
+        }
+        let resultListData: IGetReposListReturnType | undefined;
+
+        for (let i = attrs.action.count; i > 0; i--) {
+            const response =
+                await thunkAPI.extra.api.post<IGetReposListReturnType>('', {
+                    query,
+                    variables: { ...variables },
+                });
+
+            const data = response.data.data;
             if (attrs.action.type === 'next') {
-                variables = {
-                    first: attrs.variables.first,
-                    after: attrs.cursor,
-                };
-            } else {
-                variables = {
-                    last: attrs.variables.first,
-                    before: attrs.cursor,
-                };
+                variables.after = data.search.pageInfo.endCursor;
             }
-            let resultListData: IGetReposListReturnType | undefined;
-
-            for (let i = attrs.action.count; i > 0; i--) {
-                const response =
-                    await thunkAPI.extra.api.post<IGetReposListReturnType>('', {
-                        query,
-                        variables: { ...variables },
-                    });
-
-                const data = response.data.data;
-                if (attrs.action.type === 'next') {
-                    variables.after = data.search.pageInfo.endCursor;
-                }
-                if (attrs.action.type === 'prev') {
-                    variables.before = data.search.pageInfo.startCursor;
-                }
-                if (i === 1 || !data.search.pageInfo.hasNextPage) {
-                    resultListData = response.data;
-                }
+            if (attrs.action.type === 'prev') {
+                variables.before = data.search.pageInfo.startCursor;
             }
-
-            if (resultListData) {
-                const reposList = requestReposListToRedux(
-                    resultListData.data.search,
-                );
-                thunkAPI.dispatch(reposListActions.setList(reposList ?? []));
-                thunkAPI.dispatch(
-                    reposListActions.setTotalReposCount(
-                        resultListData.data.search.repositoryCount,
-                    ),
-                );
-                thunkAPI.dispatch(
-                    reposListActions.setStartCursor(
-                        resultListData.data.search.pageInfo.startCursor,
-                    ),
-                );
-                thunkAPI.dispatch(
-                    reposListActions.setEndCursor(
-                        resultListData.data.search.pageInfo.endCursor,
-                    ),
-                );
+            if (i === 1 || !data.search.pageInfo.hasNextPage) {
+                resultListData = response.data;
             }
+        }
+
+        if (resultListData) {
+            const reposList = requestReposListToRedux(
+                resultListData.data.search,
+            );
+            thunkAPI.dispatch(reposListActions.setList(reposList ?? []));
+            thunkAPI.dispatch(
+                reposListActions.setTotalReposCount(
+                    resultListData.data.search.repositoryCount,
+                ),
+            );
+            thunkAPI.dispatch(
+                reposListActions.setStartCursor(
+                    resultListData.data.search.pageInfo.startCursor,
+                ),
+            );
+            thunkAPI.dispatch(
+                reposListActions.setEndCursor(
+                    resultListData.data.search.pageInfo.endCursor,
+                ),
+            );
+            thunkAPI.dispatch(
+                reposListActions.setTotalReposCount(
+                    resultListData.data.search.repositoryCount,
+                ),
+            );
         }
     } catch (error) {
         if (error instanceof AxiosError) {
@@ -135,3 +127,21 @@ export const getReposListThunk = createAsyncThunk<
         throw error;
     }
 });
+
+const requestReposListToRedux = (requestReposSearch: IRepoSearch) => {
+    const reposList: IReposListItem[] | undefined =
+        requestReposSearch.nodes?.map((node) => {
+            const lastCommitedDate =
+                node.defaultBranchRef?.target?.history.nodes?.[0].committedDate;
+
+            return {
+                name: node.name,
+                starsCount: node.stargazerCount,
+                url: node.url,
+                lasCommitedDate: lastCommitedDate,
+                id: node.id,
+            };
+        });
+
+    return reposList;
+};

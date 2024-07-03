@@ -5,6 +5,7 @@ export type GetReposListQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
   before?: Types.InputMaybe<Types.Scalars['String']['input']>;
   last?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  query: Types.Scalars['String']['input'];
 }>;
 
 
