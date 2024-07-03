@@ -8,6 +8,7 @@ import { ReposList } from '@/entity/repo/ui/ReposList/ReposList.tsx';
 import { Pagination } from '@/shared/ui';
 import cls from './ReposListPage.module.scss';
 import { reposListActions } from '@/entity/repo/model/slices/reposListSlice.ts';
+import { getCurrentUserRepoListThunk } from '@/entity/repo/model/services/getCurrentUserRepoList/getCurrentUserRepoListThunk.ts';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -18,14 +19,27 @@ const ReposListPage: FC = () => {
     );
 
     useEffect(() => {
+        if (repos.searchQuery !== '') {
+            dispatch(
+                getReposListThunk({
+                    variables: {
+                        first: ITEMS_PER_PAGE,
+                        ...(repos.currentPage !== 1 && {
+                            before: repos.startCursor,
+                        }),
+                        query: repos.searchQuery,
+                    },
+                }),
+            );
+            return;
+        }
         dispatch(
-            getReposListThunk({
+            getCurrentUserRepoListThunk({
                 variables: {
                     first: ITEMS_PER_PAGE,
                     ...(repos.currentPage !== 1 && {
                         before: repos.startCursor,
                     }),
-                    query: 'aa',
                 },
             }),
         );

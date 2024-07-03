@@ -1,6 +1,16 @@
-{
+query getCurrentUserRepoList(
+    $first: Int
+    $after: String
+    $before: String
+    $last: Int
+) {
     viewer {
-        repositories(first: 10) {
+        repositories(
+            first: $first
+            after: $after
+            before: $before
+            last: $last
+        ) {
             totalCount
             nodes {
                 id
