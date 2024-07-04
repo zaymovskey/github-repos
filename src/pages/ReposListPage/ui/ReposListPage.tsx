@@ -95,30 +95,28 @@ const ReposListPage: FC = () => {
         });
     };
 
-    useEffect(() => {
-        // Поиск
-        dispatch(reposListActions.setCurrentPage(1));
-        if (repos.searchQuery !== '') {
-            getReposList({
-                variables: { first: ITEMS_PER_PAGE, query: repos.searchQuery },
-                cursor: repos.startCursor,
-            }).then(() => {
-                dispatch(reposListActions.setIsLoading(false));
-            });
-        } else {
-            getCurrentUserReposList({
-                variables: { first: ITEMS_PER_PAGE },
-            }).then(() => {
-                dispatch(reposListActions.setIsLoading(false));
-            });
-        }
-    }, [dispatch, repos.searchQuery]);
-
     const debouncedSetSearchQueryRef = useRef(
-        debounce(
-            (query: string) => dispatch(reposListActions.setSearchQuery(query)),
-            1500,
-        ),
+        debounce((query: string) => {
+            dispatch(reposListActions.setSearchQuery(query));
+            dispatch(reposListActions.setCurrentPage(1));
+            if (query !== '') {
+                getReposList({
+                    variables: {
+                        first: ITEMS_PER_PAGE,
+                        query: query,
+                    },
+                    cursor: repos.startCursor,
+                }).then(() => {
+                    dispatch(reposListActions.setIsLoading(false));
+                });
+            } else {
+                getCurrentUserReposList({
+                    variables: { first: ITEMS_PER_PAGE },
+                }).then(() => {
+                    dispatch(reposListActions.setIsLoading(false));
+                });
+            }
+        }, 1500),
     );
 
     const onSearchInputChange = (query: string) => {
