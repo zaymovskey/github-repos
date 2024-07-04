@@ -26,6 +26,7 @@ const ReposListPage: FC = () => {
         // Первая загрузка
         dispatch(reposListActions.setIsLoading(true));
         if (repos.searchQuery !== '') {
+            setSearchValue(repos.searchQuery);
             getReposList({
                 variables: {
                     first: ITEMS_PER_PAGE,
@@ -146,6 +147,7 @@ const ReposListPage: FC = () => {
                     )}
                     buttonsCount={5}
                     onClickItem={onPaginationItemClick}
+                    loading={isLoading}
                 />
             </div>
         </div>

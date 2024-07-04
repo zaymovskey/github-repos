@@ -9,7 +9,7 @@ export enum EnumAppRoutes {
 
 export const RoutePath: Record<EnumAppRoutes, string> = {
     [EnumAppRoutes.REPOS_LIST]: '/',
-    [EnumAppRoutes.REPO_CARD]: '/repo-card',
+    [EnumAppRoutes.REPO_CARD]: '/repo-card/:id',
 };
 
 export const RouteConfig: Record<EnumAppRoutes, RouteProps> = {

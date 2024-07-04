@@ -8,6 +8,7 @@ interface IPaginationProps {
     currentPage: number;
     buttonsCount: number;
     onClickItem: (pageNumber: number) => void;
+    loading?: boolean;
 }
 
 export const Pagination: FC<IPaginationProps> = ({
@@ -16,6 +17,7 @@ export const Pagination: FC<IPaginationProps> = ({
     currentPage,
     buttonsCount,
     onClickItem,
+    loading = false,
 }) => {
     const getPageNumbers = (
         totalPages: number,
@@ -54,6 +56,7 @@ export const Pagination: FC<IPaginationProps> = ({
                     )}
                     key={pageNumber}
                     onClick={() => onClickItem(pageNumber)}
+                    disabled={loading}
                 >
                     {pageNumber}
                 </button>

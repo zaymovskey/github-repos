@@ -11,7 +11,7 @@ interface IRepoCardProps {
 export const RepoCard: FC<IRepoCardProps> = ({ repo, className }) => {
     return (
         <div className={classNames(cls.repoCard, {}, [className])}>
-            <a href="#" className={cls.repoName}>
+            <a href={`/repo-card/${repo.id}`} className={cls.repoName}>
                 {repo.name}
             </a>
             <span className={cls.repoStars}>{repo.starsCount} ☆</span>

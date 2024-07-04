@@ -1,0 +1,33 @@
+query getRepoById($id: ID!) {
+    node(id: $id) {
+        ... on Repository {
+            id
+            name
+            description
+            stargazerCount
+            owner {
+                avatarUrl
+                url
+                login
+            }
+            defaultBranchRef {
+                target {
+                    ... on Commit {
+                        history(first: 1) {
+                            nodes {
+                                ... on Commit {
+                                    committedDate
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            languages(first: 100) {
+                nodes {
+                    name
+                }
+            }
+        }
+    }
+}

@@ -1,16 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { IReposListSlice } from '../types/ReposListSheme.ts';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IRepoDetailsScheme } from '@/entity/repo';
+import { IRepo } from '@/entity/repo/model/types/RepoDetaisScheme.ts';
 
-const initialState: IReposListSlice = {
+const initialState: IRepoDetailsScheme = {
     isLoading: false,
-    error: undefined,
+    error: '',
     data: undefined,
 };
 
 export const repoSliceDetails = createSlice({
     name: 'repoSliceDetails',
     initialState,
-    reducers: {},
+    reducers: {
+        setData(state, action: PayloadAction<IRepo>) {
+            state.data = action.payload;
+        },
+        setLoading(state, action: PayloadAction<boolean>) {
+            state.isLoading = action.payload;
+        },
+    },
 });
 
 export const { actions: repoDetailsActions } = repoSliceDetails;
